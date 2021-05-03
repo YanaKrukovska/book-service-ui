@@ -1,20 +1,20 @@
 import {Component, OnInit} from '@angular/core';
-import {Book} from '../book.model';
-import {BookService} from '../book.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
+import {BookElement} from '../../models/book-response.model';
+import {DataStorageService} from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-book-detail',
   templateUrl: './book-detail.component.html',
+  styleUrls: ['./book-detail.component.css']
 })
 export class BookDetailComponent implements OnInit {
 
-  book: Book;
+  book: BookElement;
   id: number;
 
-  constructor(private bookService: BookService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(private route: ActivatedRoute,
+              private dataStorageService: DataStorageService) {
   }
 
   ngOnInit(): void {
@@ -22,7 +22,14 @@ export class BookDetailComponent implements OnInit {
       .subscribe(
         (params: Params) => {
           this.id = +params['id'];
-          this.book = this.bookService.getBook(this.id);
+
+          this.dataStorageService.getBookById(this.id).subscribe(data => {
+            for (const book of data._embedded.books) {
+              if (book.id === this.id) {
+                this.book = book;
+              }
+            }
+          });
         }
       );
   }

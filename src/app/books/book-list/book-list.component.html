@@ -9,7 +9,8 @@
     <app-book-item
       *ngFor="let bookEl of books; let i = index"
       [book]="bookEl"
-      [index]="i"></app-book-item>
+      [index]="bookEl.id">
+    </app-book-item>
   </div>
 </div>
 

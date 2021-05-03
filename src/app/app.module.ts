@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { BooksComponent } from './books/books.component';
-import {BookService} from './books/book.service';
 import { BookStartComponent } from './books/books-start/book-start.component';
 import { BookListComponent } from './books/book-list/book-list.component';
 import { BookItemComponent } from './books/book-list/book-item/book-item.component';
@@ -38,7 +37,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule
   ],
   providers: [
-    BookService,
     DataStorageService
   ],
   bootstrap: [AppComponent]

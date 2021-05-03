@@ -1,19 +1,14 @@
-export class BookResponse {
+export interface BookResponse {
   _embedded: Embedded;
   _links: BookResponseLinks;
   page: Page;
-
-
-  get embedded(): Embedded {
-    return this._embedded;
-  }
 }
 
-export class Embedded {
+export interface Embedded {
   books: BookElement[];
 }
 
-export class BookElement {
+export interface BookElement {
   readCount: number;
   bookRate: number;
   author: string;
@@ -22,27 +17,27 @@ export class BookElement {
   _links: BookLinks;
 }
 
-export class BookLinks {
+export interface BookLinks {
   self: Profile;
   book: LinksBook;
 }
 
-export class LinksBook {
+export interface LinksBook {
   href: string;
   templated: boolean;
 }
 
-export class Profile {
+export interface Profile {
   href: string;
 }
 
-export class BookResponseLinks {
+export interface BookResponseLinks {
   self: Profile;
   profile: Profile;
   search: Profile;
 }
 
-export class Page {
+export interface Page {
   size: number;
   totalElements: number;
   totalPages: number;
