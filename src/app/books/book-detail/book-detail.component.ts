@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {BookElement} from '../../models/book-response.model';
+import {ActivatedRoute, Params} from '@angular/router';
 import {DataStorageService} from '../../shared/data-storage.service';
+import {Read, ReadBook} from '../../models/book-reads-response.model';
 
 @Component({
   selector: 'app-book-detail',
@@ -10,7 +10,8 @@ import {DataStorageService} from '../../shared/data-storage.service';
 })
 export class BookDetailComponent implements OnInit {
 
-  book: BookElement;
+  book: ReadBook;
+  reviews: Read[];
   id: number;
 
   constructor(private route: ActivatedRoute,
@@ -22,13 +23,9 @@ export class BookDetailComponent implements OnInit {
       .subscribe(
         (params: Params) => {
           this.id = +params['id'];
-
-          this.dataStorageService.getBookById(this.id).subscribe(data => {
-            for (const book of data._embedded.books) {
-              if (book.id === this.id) {
-                this.book = book;
-              }
-            }
+          this.dataStorageService.getBookDetailsById(this.id).subscribe(data => {
+            this.book = data._embedded.reads[0].book;
+            this.reviews = data._embedded.reads;
           });
         }
       );

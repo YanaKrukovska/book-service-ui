@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {BookResponse} from '../models/book-response.model';
+import {DetailedBookResponse} from '../models/book-reads-response.model';
+import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -10,11 +12,13 @@ export class DataStorageService {
   books: any;
   bookResponse: BookResponse;
 
-  getAllBooks() {
+  getAllBooks(): Observable<BookResponse> {
     return this.http.get<BookResponse>('http://localhost:8041/books');
   }
 
-  getBookById(id: number) {
-    return this.http.get<BookResponse>('http://localhost:8041/books');
+  getBookDetailsById(id: number): Observable<DetailedBookResponse> {
+    return this.http.get<DetailedBookResponse>(
+      'http://localhost:8041/reads/search/findByBookId',
+      {params: new HttpParams().set('id', String(id)).set('projection', 'view')});
   }
 }

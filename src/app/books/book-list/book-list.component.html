@@ -7,10 +7,26 @@
 <div class="row">
   <div class="col-xs-12">
     <app-book-item
-      *ngFor="let bookEl of books; let i = index"
+      *ngFor="let bookEl of books  | paginate : {
+                  itemsPerPage: tableSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+                let i = index"
       [book]="bookEl"
       [index]="bookEl.id">
     </app-book-item>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="d-flex justify-content-center">
+    <pagination-controls
+      responsive="true"
+      previousLabel="Prev"
+      nextLabel="Next"
+      (pageChange)="onTableDataChange($event)">
+    </pagination-controls>
   </div>
 </div>
 

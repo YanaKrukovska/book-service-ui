@@ -1,20 +1,21 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { BooksComponent } from './books/books.component';
-import { BookStartComponent } from './books/books-start/book-start.component';
-import { BookListComponent } from './books/book-list/book-list.component';
-import { BookItemComponent } from './books/book-list/book-item/book-item.component';
-import { BookDetailComponent } from './books/book-detail/book-detail.component';
+import {AppComponent} from './app.component';
+import {HeaderComponent} from './header/header.component';
+import {BooksComponent} from './books/books.component';
+import {BookStartComponent} from './books/books-start/book-start.component';
+import {BookListComponent} from './books/book-list/book-list.component';
+import {BookItemComponent} from './books/book-list/book-item/book-item.component';
+import {BookDetailComponent} from './books/book-detail/book-detail.component';
 import {DataStorageService} from './shared/data-storage.service';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {DropdownDirective} from './shared/dropdown.directive';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ShelfComponent } from './shelf/shelf.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {ShelfComponent} from './shelf/shelf.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -34,11 +35,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    NgxPaginationModule
   ],
   providers: [
     DataStorageService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

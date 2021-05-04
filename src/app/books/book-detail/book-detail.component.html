@@ -15,5 +15,15 @@
     <p> Read by {{ book.readCount }} people</p>
   </div>
 </div>
+<div class="row">
+  <div class="list-group-item" *ngFor="let review of reviews">
+    <div class="card-body">
+      <h4><b>{{ review.userName }}</b></h4>
+      <ngb-rating [max]="5" rate="{{ review.rate}}" [readonly]="true"></ngb-rating>
+      <p>{{ review.review }}</p>
+      <h6 class="read-date">{{ review.readDate | date:'MMMM dd, yyyy, HH:mm' }} </h6>
+    </div>
+  </div>
+</div>
 
 

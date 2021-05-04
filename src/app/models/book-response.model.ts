@@ -5,10 +5,10 @@ export interface BookResponse {
 }
 
 export interface Embedded {
-  books: BookElement[];
+  books: Book[];
 }
 
-export interface BookElement {
+export interface Book {
   readCount: number;
   bookRate: number;
   author: string;
