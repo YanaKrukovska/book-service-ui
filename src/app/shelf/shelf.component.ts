@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Review} from './review.model';
 import {Book} from '../books/book.model';
+import {Read} from '../models/book-reads-response.model';
+import {DataStorageService} from '../shared/data-storage.service';
 
 @Component({
   selector: 'app-shelf',
@@ -9,21 +11,23 @@ import {Book} from '../books/book.model';
 })
 export class ShelfComponent implements OnInit {
 
-  shelf: Review[];
+  reviews: Read[];
+  page = 1;
+  count = 0;
+  tableSize = 4;
+  userId = 1;
 
-  constructor() {
+  constructor(public dataStorageService: DataStorageService) {
   }
 
   ngOnInit(): void {
-    this.shelf =
-      [
-        new Review(new Book('Book 1', 'Author 1', 5.0), new Date('Jan 07 2021 09:44:48'),
-          5, 'Very good'),
-        new Review(new Book('Book 2', 'Author 2', 3.6), new Date('Mar 22 2021 18:27:33'),
-          1, 'Meh'),
-        new Review(new Book('Book 3', 'Author 1', 4.2), new Date('Apr 30 2021 23:14:59'),
-          3, '')
-      ];
+    this.dataStorageService.getReviewsByUser(this.userId).subscribe(data => {
+      this.reviews = data._embedded.reads;
+    });
+  }
+
+  onTableDataChange(event): void {
+    this.page = event;
   }
 
 }

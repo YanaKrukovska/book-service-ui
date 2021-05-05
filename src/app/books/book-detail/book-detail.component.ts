@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {DataStorageService} from '../../shared/data-storage.service';
-import {Read, ReadBook} from '../../models/book-reads-response.model';
+import {NewRead, Read, ReadBook, ReadLinks} from '../../models/book-reads-response.model';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-book-detail',
@@ -13,8 +14,10 @@ export class BookDetailComponent implements OnInit {
   book: ReadBook;
   reviews: Read[];
   id: number;
+  isAdding = false;
+  addReviewForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute, private router: Router,
               private dataStorageService: DataStorageService) {
   }
 
@@ -23,12 +26,50 @@ export class BookDetailComponent implements OnInit {
       .subscribe(
         (params: Params) => {
           this.id = +params['id'];
-          this.dataStorageService.getBookDetailsById(this.id).subscribe(data => {
-            this.book = data._embedded.reads[0].book;
-            this.reviews = data._embedded.reads;
-          });
+          this.initForm();
+          this.updateBookInformation();
         }
       );
   }
 
+  private updateBookInformation(): void {
+    this.dataStorageService.getBookDetailsById(this.id).subscribe(data => {
+      this.book = data._embedded.reads[0].book;
+      this.reviews = data._embedded.reads;
+    });
+  }
+
+  enableAddForm(): void {
+    this.isAdding = true;
+  }
+
+  onSubmit(): void {
+    const newReview: NewRead = {
+      rate: this.addReviewForm.value.stars,
+      review: this.addReviewForm.value.review,
+      readDate: this.addReviewForm.value.readDate,
+      book: 'http://localhost:8041/books/' + this.id,
+      user: 'http://localhost:8041/users/2'
+    };
+    this.dataStorageService.postNewReview(newReview).subscribe(
+      () => {
+        this.updateBookInformation();
+      }
+    );
+    this.onCancel();
+  }
+
+
+  private initForm(): void {
+    this.addReviewForm = new FormGroup({
+      review: new FormControl('', Validators.required),
+      stars: new FormControl('', Validators.required),
+      readDate: new FormControl('', Validators.required)
+    });
+  }
+
+  onCancel(): void {
+    this.isAdding = false;
+    this.addReviewForm.reset();
+  }
 }

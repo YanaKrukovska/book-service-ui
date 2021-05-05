@@ -45,3 +45,11 @@ export interface ReadBook {
 export interface DetailedBookResponseLinks {
   self: Self;
 }
+
+export interface NewRead {
+  rate: number;
+  review: string;
+  readDate: Date;
+  book: string;
+  user: string;
+}
