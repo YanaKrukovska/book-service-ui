@@ -11,11 +11,13 @@ import {BookDetailComponent} from './books/book-detail/book-detail.component';
 import {DataStorageService} from './shared/data-storage.service';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
-import {DropdownDirective} from './shared/dropdown.directive';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ShelfComponent} from './shelf/shelf.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {authInterceptorProviders} from './shared/auth.interceptor';
+import {LoginComponent} from './login/login.component';
+import {RegisterComponent} from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,9 @@ import {NgxPaginationModule} from 'ngx-pagination';
     BookListComponent,
     BookItemComponent,
     BookDetailComponent,
-    DropdownDirective,
-    ShelfComponent
+    ShelfComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     NgxPaginationModule
   ],
   providers: [
-    DataStorageService
+    DataStorageService,
+    authInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

@@ -3,6 +3,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {DataStorageService} from '../../shared/data-storage.service';
 import {NewRead, Read, ReadBook, ReadLinks} from '../../models/book-reads-response.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {TokenStorageService} from '../../shared/token-storage.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -18,7 +19,8 @@ export class BookDetailComponent implements OnInit {
   addReviewForm: FormGroup;
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private dataStorageService: DataStorageService) {
+              private dataStorageService: DataStorageService,
+              private tokenStorageService: TokenStorageService) {
   }
 
   ngOnInit(): void {
@@ -49,7 +51,7 @@ export class BookDetailComponent implements OnInit {
       review: this.addReviewForm.value.review,
       readDate: this.addReviewForm.value.readDate,
       book: 'http://localhost:8041/books/' + this.id,
-      user: 'http://localhost:8041/users/2'
+      user: 'http://localhost:8041/users/' + this.tokenStorageService.getUserId()
     };
     this.dataStorageService.postNewReview(newReview).subscribe(
       () => {

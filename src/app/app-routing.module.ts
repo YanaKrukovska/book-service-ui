@@ -5,6 +5,8 @@ import {BookStartComponent} from './books/books-start/book-start.component';
 import {BookDetailComponent} from './books/book-detail/book-detail.component';
 import {BooksResolverService} from './books/books-resolver.service';
 import {ShelfComponent} from './shelf/shelf.component';
+import {LoginComponent} from './login/login.component';
+import {RegisterComponent} from './register/register.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/books', pathMatch: 'full'},
@@ -20,10 +22,9 @@ const appRoutes: Routes = [
       },
     ]
   },
-  {
-    path: 'shelf',
-    component: ShelfComponent
-  }
+  {path: 'shelf', component: ShelfComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent}
 ];
 
 @NgModule({
