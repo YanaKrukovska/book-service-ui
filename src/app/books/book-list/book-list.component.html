@@ -1,11 +1,49 @@
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-success" (click)="getBooks()">New Book</button>
+    <button class="btn btn-success" (click)="enableAddForm()" *ngIf="isAdmin && !isAddingNewBook">New Book</button>
+
+    <div class="row" style="margin-top: 2%; margin-bottom: 2%" *ngIf="isAddingNewBook">
+      <div class="col-xs-12">
+        <form [formGroup]="addBookForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" formControlName="title" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" formControlName="author" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <button
+                type="submit"
+                class="btn btn-success"
+                [disabled]="!addBookForm.valid">Save
+              </button>
+              <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 <hr>
 <div class="row">
   <div class="col-xs-12">
+    <label for="sortSelect">Sort by </label>
+    <select #sortSelect id="sortSelect" class="form-control" (change)="onOptionsSelected(sortSelect.value)">
+      <option *ngFor="let option of sortingOptions">{{option}}</option>
+    </select>
+    <br>
     <app-book-item
       *ngFor="let bookEl of books  | paginate : {
                   itemsPerPage: tableSize,

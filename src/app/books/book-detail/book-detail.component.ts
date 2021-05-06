@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {DataStorageService} from '../../shared/data-storage.service';
-import {NewRead, Read, ReadBook, ReadLinks} from '../../models/book-reads-response.model';
+import {NewRead, Read, ReadBook} from '../../models/book-reads-response.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {TokenStorageService} from '../../shared/token-storage.service';
+import {Book} from '../../models/book-response.model';
 
 @Component({
   selector: 'app-book-detail',
@@ -17,6 +18,7 @@ export class BookDetailComponent implements OnInit {
   id: number;
   isAdding = false;
   addReviewForm: FormGroup;
+  isLoggedIn = false;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private dataStorageService: DataStorageService,
@@ -32,12 +34,30 @@ export class BookDetailComponent implements OnInit {
           this.updateBookInformation();
         }
       );
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
   }
 
   private updateBookInformation(): void {
     this.dataStorageService.getBookDetailsById(this.id).subscribe(data => {
-      this.book = data._embedded.reads[0].book;
-      this.reviews = data._embedded.reads;
+
+      if (data._embedded.reads.length === 0) {
+        this.getBookInformation();
+      } else {
+        this.book = data._embedded.reads[0].book;
+        this.reviews = data._embedded.reads;
+      }
+    });
+  }
+
+  private getBookInformation(): void {
+    this.dataStorageService.getBookById(this.id).subscribe(res => {
+      this.book = {
+        author: res.author,
+        title: res.title,
+        bookRate: res.bookRate,
+        readCount: res.readCount
+      };
+      this.reviews = [];
     });
   }
 

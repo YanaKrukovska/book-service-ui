@@ -3,7 +3,6 @@ import {Routes, RouterModule} from '@angular/router';
 import {BooksComponent} from './books/books.component';
 import {BookStartComponent} from './books/books-start/book-start.component';
 import {BookDetailComponent} from './books/book-detail/book-detail.component';
-import {BooksResolverService} from './books/books-resolver.service';
 import {ShelfComponent} from './shelf/shelf.component';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
@@ -17,8 +16,7 @@ const appRoutes: Routes = [
       {path: '', component: BookStartComponent},
       {
         path: ':id',
-        component: BookDetailComponent,
-        resolve: [BooksResolverService]
+        component: BookDetailComponent
       },
     ]
   },
