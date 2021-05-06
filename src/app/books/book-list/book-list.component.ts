@@ -1,32 +1,38 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataStorageService} from '../../shared/data-storage.service';
 import {Book} from '../../models/book-response.model';
 import {TokenStorageService} from '../../shared/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UpdateBookListService} from '../../shared/book-list-update.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, OnDestroy {
 
   private readonly defaultSortMethod = 'Date added';
+  private deleteBookUpdate: Subscription;
 
   books: Book[];
   page = 1;
   count = 0;
-  tableSize = 6;
-  isAdmin = false;
+  tableSize = 5;
   addBookForm: FormGroup;
+
+  isAdmin = false;
   isAddingNewBook = false;
+
   currentSorting: string;
   sortingOptions: any = [this.defaultSortMethod, 'Title', 'Rating', 'Read count'];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private dataStorageService: DataStorageService,
-              private tokenStorageService: TokenStorageService) {
+              private tokenStorageService: TokenStorageService,
+              private updateBookListService: UpdateBookListService) {
   }
 
   ngOnInit(): void {
@@ -35,6 +41,16 @@ export class BookListComponent implements OnInit {
     }
     this.getBooksSorted(this.defaultSortMethod);
     this.initForm();
+
+    this.deleteBookUpdate = this.updateBookListService.getUpdate().subscribe
+    (() => {
+      this.page = 1;
+      this.getBooksSorted(this.defaultSortMethod);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.deleteBookUpdate.unsubscribe();
   }
 
   getBooksSorted(sortType: string): void {
@@ -81,7 +97,6 @@ export class BookListComponent implements OnInit {
     this.onCancel();
   }
 
-
   private initForm(): void {
     this.addBookForm = new FormGroup({
       title: new FormControl('', Validators.minLength(1)),
@@ -98,4 +113,5 @@ export class BookListComponent implements OnInit {
     this.currentSorting = value;
     this.getBooksSorted(value);
   }
+
 }

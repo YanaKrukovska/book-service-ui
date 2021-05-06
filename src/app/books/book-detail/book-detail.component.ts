@@ -4,7 +4,7 @@ import {DataStorageService} from '../../shared/data-storage.service';
 import {NewRead, Read, ReadBook} from '../../models/book-reads-response.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {TokenStorageService} from '../../shared/token-storage.service';
-import {Book} from '../../models/book-response.model';
+import {UpdateBookListService} from '../../shared/book-list-update.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -19,10 +19,12 @@ export class BookDetailComponent implements OnInit {
   isAdding = false;
   addReviewForm: FormGroup;
   isLoggedIn = false;
+  isAdmin: boolean;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private dataStorageService: DataStorageService,
-              private tokenStorageService: TokenStorageService) {
+              private tokenStorageService: TokenStorageService,
+              private updateBookListService: UpdateBookListService) {
   }
 
   ngOnInit(): void {
@@ -35,6 +37,7 @@ export class BookDetailComponent implements OnInit {
         }
       );
     this.isLoggedIn = !!this.tokenStorageService.getToken();
+    this.isAdmin = this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN');
   }
 
   private updateBookInformation(): void {
@@ -93,5 +96,18 @@ export class BookDetailComponent implements OnInit {
   onCancel(): void {
     this.isAdding = false;
     this.addReviewForm.reset();
+  }
+
+  deleteBook(): void {
+    if (window.confirm('Are sure you want to delete this book?')) {
+      this.dataStorageService.deleteBook(this.id).subscribe(() => {
+        this.sendMessage();
+        this.router.navigate(['/books']);
+      });
+    }
+  }
+
+  sendMessage(): void {
+    this.updateBookListService.sendUpdate();
   }
 }

@@ -20,6 +20,10 @@ export class ShelfComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserReviews();
+  }
+
+  private getUserReviews(): void {
     this.dataStorageService.getReviewsByUser(Number(this.tokenStorageService.getUserId()))
       .subscribe(data => {
         this.reviews = data._embedded.reads;
@@ -30,4 +34,11 @@ export class ShelfComponent implements OnInit {
     this.page = event;
   }
 
+  deleteReview(id: number): void {
+    if (window.confirm('Are sure you want to delete this review?')) {
+      this.dataStorageService.deleteReview(id).subscribe(() => {
+        this.getUserReviews();
+      });
+    }
+  }
 }

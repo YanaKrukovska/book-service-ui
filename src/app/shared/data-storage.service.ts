@@ -55,4 +55,11 @@ export class DataStorageService {
       {params: new HttpParams().set('id', String(userId))});
   }
 
+  deleteReview(id: number): Observable<any> {
+    return this.http.delete(`${apiUrl}reads/${id}`);
+  }
+
+  deleteBook(id: number): Observable<any> {
+    return this.http.delete(`${apiUrl}books/${id}`);
+  }
 }
