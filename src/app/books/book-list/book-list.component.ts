@@ -6,6 +6,7 @@ import {TokenStorageService} from '../../shared/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UpdateBookListService} from '../../shared/book-list-update.service';
 import {Subscription} from 'rxjs';
+import {AuthService} from '../../shared/auth.service';
 
 @Component({
   selector: 'app-book-list',
@@ -15,6 +16,7 @@ export class BookListComponent implements OnInit, OnDestroy {
 
   private readonly defaultSortMethod = 'Date added';
   private deleteBookUpdate: Subscription;
+  private loggedInUpdate: Subscription;
 
   books: Book[];
   page = 1;
@@ -32,7 +34,8 @@ export class BookListComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private dataStorageService: DataStorageService,
               private tokenStorageService: TokenStorageService,
-              private updateBookListService: UpdateBookListService) {
+              private updateBookListService: UpdateBookListService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -42,24 +45,27 @@ export class BookListComponent implements OnInit, OnDestroy {
     this.getBooksSorted(this.defaultSortMethod);
     this.initForm();
 
-    this.deleteBookUpdate = this.updateBookListService.getUpdate().subscribe
-    (() => {
+    this.deleteBookUpdate = this.updateBookListService.getUpdate().subscribe(() => {
       this.page = 1;
       this.getBooksSorted(this.defaultSortMethod);
     });
+
+    this.loggedInUpdate = this.authService.getAdminLoggedIn().subscribe(
+      (isLoggedIn) => {
+        this.isAdmin = isLoggedIn;
+      }
+    );
+
   }
 
   ngOnDestroy(): void {
     this.deleteBookUpdate.unsubscribe();
+    this.loggedInUpdate.unsubscribe();
   }
 
   getBooksSorted(sortType: string): void {
     switch (sortType) {
       case 'Rating':
-        this.dataStorageService.getBooksSortedBy(sortType).subscribe(data => {
-          this.books = data._embedded.books;
-        });
-        break;
       case 'Read count':
         this.dataStorageService.getBooksSortedBy(sortType).subscribe(data => {
           this.books = data._embedded.books;

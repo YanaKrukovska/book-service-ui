@@ -31,13 +31,16 @@ export class BookDetailComponent implements OnInit {
     this.route.params
       .subscribe(
         (params: Params) => {
-          this.id = +params['id'];
+          this.id = +params.id;
           this.initForm();
           this.updateBookInformation();
         }
       );
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-    this.isAdmin = this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN');
+
+    if (this.isLoggedIn) {
+      this.isAdmin = this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN');
+    }
   }
 
   private updateBookInformation(): void {

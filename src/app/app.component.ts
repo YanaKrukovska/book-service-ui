@@ -7,11 +7,5 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
   title = 'book-service-ui';
-  loadedFeature = 'recipe';
-  isLoggedIn = false;
   username?: string;
-
-  onNavigate(feature: string): void {
-    this.loadedFeature = feature;
-  }
 }

@@ -9,9 +9,6 @@ export class BookItemComponent implements OnInit {
   @Input() book: Book;
   @Input() index: number;
 
-  constructor() {
-  }
-
   ngOnInit(): void {
     this.index = this.book.id;
   }

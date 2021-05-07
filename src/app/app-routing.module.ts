@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {BooksComponent} from './books/books.component';
 import {BookStartComponent} from './books/books-start/book-start.component';
 import {BookDetailComponent} from './books/book-detail/book-detail.component';

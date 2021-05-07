@@ -8,8 +8,6 @@ const USER_ID_KEY = 'auth-user-id';
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor() {
-  }
 
   signOut(): void {
     window.sessionStorage.clear();
